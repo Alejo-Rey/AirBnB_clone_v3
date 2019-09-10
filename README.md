@@ -154,8 +154,8 @@ EOF  all  create  destroy  help  quit  show  update
 No known bugs at this time. 
 
 ## Authors
-Javier Bonilla - [Github](https://github.com/javb92) / [Twitter](https://twitter.com/javb92)
-Alejandro Rey - [Github](https://github.com/alejo-rey) / [Twitter](https://twitter.com/alejoreyrios)
+Javier Bonilla - [Github](https://github.com/javb92) / [Twitter](https://twitter.com/javb92)  
+Alejandro Rey - [Github](https://github.com/alejo-rey) / [Twitter](https://twitter.com/alejoreyrios)  
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 
