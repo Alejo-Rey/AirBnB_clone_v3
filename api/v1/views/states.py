@@ -23,7 +23,7 @@ def get_state_by_id(state_id):
     """
     for key, value in storage.all("State").items():
         if state_id == value.id:
-            return value.to_dict()
+            return jsonify(value.to_dict())
     abort(404)
 
 
@@ -36,7 +36,7 @@ def delete_state(state_id):
         if state_id in key:
             storage.delete(values)
             storage.save()
-            return ({}, 200)
+            return jsonify({}), 200
     abort(404)
 
 
@@ -53,7 +53,7 @@ def post_state():
         new_state.name = new_dict["name"]
         storage.new(new_state)
         storage.save()
-        return (new_state.to_dict(), 201)
+        return jsonify(new_state.to_dict()), 201
     else:
         return jsonify({"error": "Missing name"}), 400
 
@@ -73,5 +73,5 @@ def put_state(state_id):
         if state_id == value.id:
             value.__dict__.update(new_dict)
             storage.save()
-            return (value.to_dict(), 200)
+            return jsonify(value.to_dict()), 200
     abort(404)
