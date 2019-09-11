@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """Create a new view for State objects that handles all default RestFul API
 """
-from flask import Flask, json, jsonify, abort
+from flask import Flask, json, jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
-
+from models.state import State
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
@@ -37,3 +37,20 @@ def delete_state(state_id):
             storage.save()
             return ({}, 200)
     abort(404)
+
+
+@app_views.route('/states',  methods=['POST'], strict_slashes=False)
+def post_state():
+    """ ††† method HTTP POST json
+    """
+    if not request.is_json:
+        abort(400, description="Not a JSON")
+    else:
+        new_dict = request.get_json()
+        if "name" in new_dict.keys():
+            new_state = State()
+            new_state.name = new_dict["name"]
+            storage.new(new_state)
+            storage.save()
+            return (new_state.to_dict(), 201)
+        abort(400, description="Missing name")
