@@ -36,6 +36,7 @@ def delete_state(state_id):
         if state_id in key:
             storage.delete(values)
             storage.save()
+            storage.close()
             return jsonify({}), 200
     abort(404)
 
@@ -48,7 +49,7 @@ def post_state():
         new_dict = request.get_json()
     else:
         return jsonify({"error": "Not a JSON"}), 400
-    if "name" in new_dict.keys():
+    if "name" in new_dict:
         new_state = State()
         new_state.name = new_dict["name"]
         storage.new(new_state)
@@ -62,9 +63,6 @@ def post_state():
 def put_state(state_id):
     """ ††† method HTTP PUT to update the state with id †††
     """
-    states = storage.get("State", state_id)
-    if state is None:
-        abort(404)
     if request.is_json:
         new_dict = request.get_json()
     else:
