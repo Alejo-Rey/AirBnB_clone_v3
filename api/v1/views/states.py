@@ -63,14 +63,15 @@ def put_state(state_id):
     """ ††† method HTTP PUT to update the state with id †††
     """
     if request.is_json:
-        for key in ['id', 'created_at', 'updated_at']:
-            if key in new_dict:
-                del new_dict[key]
-        for key, value in storage.all("State").items():
-            if state_id == value.id:
-                value.__dict__.update(new_dict)
-                storage.save()
-                return (value.to_dict(), 200)
-        abort(404)
+        new_dict = request.get_json()
     else:
-        abort(description="Not a JSON", status=400)
+        return jsonify({"error": "Not a JSON"}), 400
+    for key in ['id', 'created_at', 'updated_at']:
+        if key in new_dict:
+            del new_dict[key]
+    for key, value in storage.all("State").items():
+        if state_id == value.id:
+            value.__dict__.update(new_dict)
+            storage.save()
+            return (value.to_dict(), 200)
+    abort(404)
