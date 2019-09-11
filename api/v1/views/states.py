@@ -14,7 +14,7 @@ def get_states():
     tmp_list = []
     for key, value in storage.all("State").items():
         tmp_list.append(value.to_dict())
-    return json.dumps(tmp_list)
+    return jsonify(tmp_list)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
