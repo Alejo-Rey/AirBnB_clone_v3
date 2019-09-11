@@ -55,7 +55,6 @@ def post_state():
         abort(400, description="Missing name")
     else:
         return "Not a JSON", 400
-#        abort(description="Not a JSON", status=400)
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
