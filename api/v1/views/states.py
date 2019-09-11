@@ -6,6 +6,7 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 
+
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
     """get all states
@@ -44,7 +45,7 @@ def post_state():
     """ ††† method HTTP POST json
     """
     if not request.is_json:
-        abort(400, description="Not a JSON")
+        return ("Not a JSON", 400)
     else:
         new_dict = request.get_json()
         if "name" in new_dict.keys():
@@ -54,3 +55,21 @@ def post_state():
             storage.save()
             return (new_state.to_dict(), 201)
         abort(400, description="Missing name")
+
+
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
+def put_state(state_id):
+    """ ††† method HTTP PUT to update the state with id †††
+    """
+
+    if not request.is_json:
+        abort(description="Not a JSON", status=400)
+    else:
+        for key, value in storage.all("State").items():
+            print("value id ----------", value.id)
+            if state_id == value.id:
+                print("json =======", request.get_json())
+                value.name = request.get_json()["name"]
+                storage.save()
+                return (value.to_dict(), 200)
+        abort(404)
