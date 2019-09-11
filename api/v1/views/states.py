@@ -46,15 +46,16 @@ def post_state():
     """
     if request.is_json:
         new_dict = request.get_json()
-        if "name" in new_dict.keys():
-            new_state = State()
-            new_state.name = new_dict["name"]
-            storage.new(new_state)
-            storage.save()
-            return (new_state.to_dict(), 201)
-        abort(400, description="Missing name")
     else:
-        abort(description="Not a JSON", status=400)
+        return jsonify({"error": "Not a JSON"}), 400
+    if "name" in new_dict.keys():
+        new_state = State()
+        new_state.name = new_dict["name"]
+        storage.new(new_state)
+        storage.save()
+        return (new_state.to_dict(), 201)
+    else:
+        return jsonify({"error": "Missing name"}), 400
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
