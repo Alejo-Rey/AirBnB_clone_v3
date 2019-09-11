@@ -54,7 +54,7 @@ def post_state():
             return (new_state.to_dict(), 201)
         abort(400, description="Missing name")
     else:
-        return "Not a JSON", 400
+        abort(description="Not a JSON", status=400)
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
@@ -72,4 +72,4 @@ def put_state(state_id):
                 return (value.to_dict(), 200)
         abort(404)
     else:
-        return "Not a JSON", 400
+        abort(description="Not a JSON", status=400)
