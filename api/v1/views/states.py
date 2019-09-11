@@ -72,7 +72,8 @@ def put_state(state_id):
             del new_dict[key]
     for key, value in storage.all("State").items():
         if state_id == value.id:
-            value.__dict__.update(new_dict)
+            for k, v in new_dict.items():
+                setattr(value, k, v)
             storage.save()
             return jsonify(value.to_dict()), 200
     abort(404)
