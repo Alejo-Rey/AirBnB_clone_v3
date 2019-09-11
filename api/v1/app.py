@@ -8,8 +8,6 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
-app.strict_slashes = False
-
 
 @app.teardown_appcontext
 def close_method(exception=None):
