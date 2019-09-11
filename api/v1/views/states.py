@@ -44,38 +44,32 @@ def delete_state(state_id):
 def post_state():
     """ ††† method HTTP POST json
     """
-    try:
+    if request.is_json:
         new_dict = request.get_json()
-    except:
-        abort(description="Not a JSON", status=400)
-    if type(new_dict) != dict:
-        abort(description="Not a JSON", status=400)
-    if "name" in new_dict.keys():
-        new_state = State()
-        new_state.name = new_dict["name"]
-        storage.new(new_state)
-        storage.save()
-        return (new_state.to_dict(), 201)
-    abort(400, description="Missing name")
+        if "name" in new_dict.keys():
+            new_state = State()
+            new_state.name = new_dict["name"]
+            storage.new(new_state)
+            storage.save()
+            return (new_state.to_dict(), 201)
+        abort(400, description="Missing name")
+    else:
+        return "Not a JSON", 400
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
     """ ††† method HTTP PUT to update the state with id †††
     """
-
-    try:
-        new_dict = request.get_json()
-    except:
-        abort(description="Not a JSON", status=400)
-    if type(new_dict) != dict:
-        abort(description="Not a JSON", status=400)
-    for key in ['id', 'created_at', 'updated_at']:
-        if key in new_dict:
-            del new_dict[key]
-    for key, value in storage.all("State").items():
-        if state_id == value.id:
-            value.__dict__.update(new_dict)
-            storage.save()
-            return (value.to_dict(), 200)
-    abort(404)
+    if request.is_json:
+        for key in ['id', 'created_at', 'updated_at']:
+            if key in new_dict:
+                del new_dict[key]
+        for key, value in storage.all("State").items():
+            if state_id == value.id:
+                value.__dict__.update(new_dict)
+                storage.save()
+                return (value.to_dict(), 200)
+        abort(404)
+    else:
+        return "Not a JSON", 400
