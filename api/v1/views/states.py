@@ -62,6 +62,9 @@ def post_state():
 def put_state(state_id):
     """ ††† method HTTP PUT to update the state with id †††
     """
+    states = storage.get("State", state_id)
+    if state is None:
+        abort(404)
     if request.is_json:
         new_dict = request.get_json()
     else:
