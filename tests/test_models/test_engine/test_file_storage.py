@@ -124,6 +124,23 @@ test_file_storage.py'])
         self.assertIsInstance(dictTest, dict)
         self.assertIs(dictTest, storage._FileStorage__objects)
 
+    def test_count(self):
+        """ Test all method """
+        count1 = len(storage.all())
+        count2 = storage.count()
+        self.assertEqual(count1, count2)
+
+    def test_get(self):
+        """ test get
+        """
+        tmp_dict = {}
+        first_state_id = list(storage.all("State").values())[0].id
+        for key, value in storage.all("State").items():
+            if first_state_id in key:
+                tmp_dict = value
+        first_state_id = list(storage.all("State").values())[0].id
+        self.assertEqual(storage.get("State", first_state_id), tmp_dict)
+
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
