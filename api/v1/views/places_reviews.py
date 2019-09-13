@@ -9,23 +9,23 @@ from models.city import City
 from models.user import User
 
 
-@app_views.route('/cities/<city_id>/places',
+@app_views.route('/places/<place_id>/reviews',
                  methods=['GET'], strict_slashes=False)
-def get_place(city_id):
+def get_rplace(place_id):
     """get all places of a id city
     """
     new_list = []
-    city = storage.get("City", city_id)
+    city = storage.get("Place", place_id)
     if city is None:
         abort(404)
     for key, values in storage.all("Place").items():
-        if city_id == values.city_id:
+        if place_id == values.id:
             new_list.append(values.to_dict())
 
     return jsonify(new_list)
 
 
-@app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('places/<place_id>/amenities', methods=['GET'], strict_slashes=False)
 def get_places_id(place_id):
     """get place by id
     """
@@ -35,7 +35,7 @@ def get_places_id(place_id):
     abort(404)
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'],
+@app_views.route('places/<place_id>/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_places(place_id):
     """delete place by id
@@ -49,7 +49,7 @@ def delete_places(place_id):
     abort(404)
 
 
-@app_views.route('/cities/<city_id>/places',
+@app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['POST'], strict_slashes=False)
 def post_places(city_id):
     """ ††† method HTTP POST json
@@ -77,7 +77,7 @@ def post_places(city_id):
     return jsonify(new_place.to_dict()), 201
 
 
-@app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/reviews/<review_id>', methods=['PUT'], strict_slashes=False)
 def put_places(city_id):
     """ ††† method HTTP PUT to update the City with id †††
     """
