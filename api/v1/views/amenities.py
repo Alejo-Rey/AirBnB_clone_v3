@@ -73,7 +73,7 @@ def amenity(amenity_id):
     for key in ['id', 'created_at', 'updated_at']:
         if key in new_dict:
             del new_dict[key]
-    for key, value in storage.all("State").items():
+    for key, value in storage.all("Amenity").items():
         if amenity_id == value.id:
             for k, v in new_dict.items():
                 setattr(value, k, v)
