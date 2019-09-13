@@ -18,7 +18,7 @@ def get_place(city_id):
     city = storage.get("City", city_id)
     if city is None:
         abort(404)
-    for key, values in storage.all("places").items():
+    for key, values in storage.all("Place").items():
         if city_id == values.city_id:
             new_list.append(values.to_dict())
 
