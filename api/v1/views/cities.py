@@ -88,9 +88,11 @@ def put_cities(city_id):
             del new_dict[key]
     for key, value in storage.all("City").items():
         if city_id == value.id:
-            for k, v in new_dict.items():
-                setattr(value, k, v)
-                storage.save()
-                storage.close()
-                return jsonify(value.to_dict()), 200
+            for skey, svalue in storage.all("State").items():
+                if value.state_id == svalue.id:
+                    for k, v in new_dict.items():
+                        setattr(value, k, v)
+                    storage.save()
+                    storage.close()
+                    return jsonify(value.to_dict()), 200
     abort(404)
