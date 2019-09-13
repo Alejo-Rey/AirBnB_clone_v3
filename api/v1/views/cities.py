@@ -14,21 +14,26 @@ def get_cities(state_id):
     """get all cities of a id State
     """
     new_list = []
-    for key, value in storage.all("City").items():
-        if state_id == value.state_id:
-            new_list.append(value.to_dict())
-    if len(new_list) == 0:
+    for skey, svalue in storage.all("State").items():
+        if state_id == svalue.id:
+            for key, value in storage.all("City").items():
+                if state_id == value.state_id:
+                    new_list.append(value.to_dict())
+    if len(new_list) > 0:
+        return jsonify(new_list)
+    else:
         abort(404)
-    return jsonify(new_list)
 
 
 @app_views.route('cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_cities_id(city_id):
-    """get city by id
+    """get city by id with verification of states
     """
     for key, values in storage.all("City").items():
         if city_id == values.id:
-            return jsonify(values.to_dict())
+            for skey, svalue in storage.all("State").items():
+                if values.state_id == svalue.id:
+                    return jsonify(values.to_dict())
     abort(404)
 
 
@@ -39,10 +44,12 @@ def delete_cities(city_id):
     """
     for key, values in storage.all("City").items():
         if city_id in key:
-            storage.delete(values)
-            storage.save()
-            storage.close()
-            return jsonify({}), 200
+            for skey, svalue in storage.all("State").items():
+                if values.state_id == svalue.id:
+                    storage.delete(values)
+                    storage.save()
+                    storage.close()
+                    return jsonify({}), 200
     abort(404)
 
 
@@ -55,21 +62,19 @@ def post_cities(state_id):
         new_dict = request.get_json()
     else:
         return jsonify({"error": "Not a JSON"}), 400
-    t_list = []
     for value in storage.all("State").values():
         if state_id == value.id:
-            t_list.append(value.id)
-    if len(t_list) == 0:
-        abort(404)
-    if "name" in new_dict:
-        new_city = City()
-        new_city.name = new_dict["name"]
-        new_city.state_id = state_id
-        storage.new(new_city)
-        storage.save()
-        return jsonify(new_city.to_dict()), 201
-    else:
-        return jsonify({"error": "Missing name"}), 400
+            if "name" in new_dict:
+                new_city = City()
+                new_city.name = new_dict["name"]
+                new_city.state_id = state_id
+                storage.new(new_city)
+                storage.save()
+                storage.close()
+                return jsonify(new_city.to_dict()), 201
+            else:
+                return jsonify({"error": "Missing name"}), 400
+    abort(404)
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
@@ -85,8 +90,11 @@ def put_cities(city_id):
             del new_dict[key]
     for key, value in storage.all("City").items():
         if city_id == value.id:
-            for k, v in new_dict.items():
-                setattr(value, k, v)
-            storage.save()
-            return jsonify(value.to_dict()), 200
+            for skey, svalue in storage.all("State").items():
+                if value.state_id == svalue.id:
+                    for k, v in new_dict.items():
+                        setattr(value, k, v)
+                    storage.save()
+                    storage.close()
+                    return jsonify(value.to_dict()), 200
     abort(404)
