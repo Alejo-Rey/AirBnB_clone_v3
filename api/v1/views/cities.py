@@ -31,7 +31,9 @@ def get_cities_id(city_id):
     """
     for key, values in storage.all("City").items():
         if city_id == values.id:
-            return jsonify(values.to_dict())
+            for skey, svalue in storage.all("State").items():
+                if values.state_id == svalue.id:
+                    return jsonify(values.to_dict())
     abort(404)
 
 
