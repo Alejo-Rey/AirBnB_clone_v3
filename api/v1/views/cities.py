@@ -27,7 +27,7 @@ def get_cities(state_id):
 
 @app_views.route('cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_cities_id(city_id):
-    """get city by id
+    """get city by id with verification of states
     """
     for key, values in storage.all("City").items():
         if city_id == values.id:
