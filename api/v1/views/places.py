@@ -41,7 +41,7 @@ def delete_places(place_id):
     """delete place by id
     """
     for key, values in storage.all("Place").items():
-        if city_id in key:
+        if place_id in key:
             storage.delete(values)
             storage.save()
             storage.close()
@@ -61,16 +61,20 @@ def post_places(city_id):
 
     if "user_id" not in new_dict:
         return jsonify({"error": "Missing user_id"}), 400
+    if "name" not in new_dict:
+        return jsonify({"error": "Missing name"}), 400
+    user = storage.get("User", new_dict["user_id"])
+    if user is None:
+        abort(404)
+    city = storage.get("City", city_id)
     if city is None:
         abort(404)
-    if "name" in new_dict:
-        new_place = Place()
-        for 
-        storage.new(new_city)
-        storage.save()
-        return jsonify(new_city.to_dict()), 201
-    else:
-        return jsonify({"error": "Missing name"}), 400
+    new_place = Place()
+    for k, v in new_dict.items():
+        setattr(new_place, k, v)
+    storage.new(new_place)
+    storage.save()
+    return jsonify(new_place.to_dict()), 201
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
