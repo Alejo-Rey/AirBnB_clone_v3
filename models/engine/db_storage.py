@@ -79,8 +79,9 @@ class DBStorage:
         """A method to retrieve one object
         """
         if cls is not None and id is not None:
-            value = self.all(cls)
-            return(value["{}.{}".format(cls, id)])
+            key = cls + "." + id
+            value = self.all(cls).get(key)
+            return(value)
         else:
             return (None)
 
