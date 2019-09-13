@@ -73,10 +73,9 @@ class FileStorage:
         """A method to retrieve one object
         """
         if cls is not None and id is not None:
-            for key, value in self.all(cls).items():
-                if id in key:
-                    return(value)
-            return (None)
+            key = cls + "." + id
+            value = self.all(cls).get(key)
+            return(value)
         else:
             return (None)
 
