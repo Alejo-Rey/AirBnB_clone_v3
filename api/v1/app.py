@@ -24,4 +24,4 @@ def resource_not_found(e):
 
 if __name__ == '__main__':
     app.run(host=os.environ['HBNB_API_HOST'],
-            port=os.environ['HBNB_API_PORT'], threaded=True)
+            port=os.environ['HBNB_API_PORT'], threaded=True, debug=True)
