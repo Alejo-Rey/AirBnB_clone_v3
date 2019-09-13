@@ -19,7 +19,7 @@ def get_cities(state_id):
             for key, value in storage.all("City").items():
                 if state_id == value.state_id:
                     new_list.append(value.to_dict())
-    if len(new_list) > 0:
+    if len(new_list) > 0 or storage.get("State", state_id):
         return jsonify(new_list)
     else:
         abort(404)
